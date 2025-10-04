@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% block content %}
+<article class="card card--full client-page">
+  <header class="client-header">
+    <div class="client-header-left">
+      <a href="/clients/" class="btn btn-outline btn-sm">← Назад к списку</a>
+      <h2>{% if mode == 'edit' %}Редактировать клиента{% else %}Новый клиент{% endif %}</h2>
+    </div>
+  </header>
+
+  <form id="clientForm" method="post" class="client-form">
+    {% csrf_token %}
+
+    <!-- ОДИН столбец -->
+    <section class="panel">
+      <h3 class="panel-title">Основное</h3>
+      <div class="field-block">
+        <label for="{{ client_form.name.id_for_label }}">Название/Клиент</label>
+        {{ client_form.name }}
+      </div>
+      <div class="field-block">
+        <label for="{{ client_form.notes.id_for_label }}">Заметки</label>
+        {{ client_form.notes }}
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-title-row">
+        <h3 class="panel-title">Атрибуты</h3>
+        <span class="pill">Всего: {{ attrs_form.fields|length }}</span>
+      </div>
+
+      <div class="tool-row">
+        <input id="attrSearch" type="search" placeholder="Поиск по названию или ключу…">
+        <label class="toggle">
+          <input type="checkbox" id="toggleKeys" checked>
+          <span>Ключи</span>
+        </label>
+      </div>
+
+      <!-- Всегда один столбец -->
+      <div class="attrs-grid">
+        {% for f in attrs_form %}
+          <div class="attr-card" data-label="{{ f.label|lower }} {{ f.field.widget.attrs.data_key|lower }}">
+            <div class="attr-head">
+              <label for="{{ f.id_for_label }}" class="attr-label">{{ f.label }}</label>
+              <span class="pill monospace token-pill">{{ f.field.widget.attrs.data_placeholder }}</span>
+            </div>
+            <div class="attr-input">{{ f }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- Липкие одинаковые кнопки -->
+    <div class="sticky-actions actions-eq">
+      <a href="/clients/" class="btn btn-outline btn-eq">Отмена</a>
+      <button type="submit" class="btn btn-primary btn-eq">
+        {% if mode == 'edit' %}Сохранить изменения{% else %}Создать клиента{% endif %}
+      </button>
+    </div>
+  </form>
+</article>
+
+<style>
+  /* уменьшенный базовый размер для страницы создания клиента */
+  .client-page { font-size: 14px; }
+  .client-page h2 { margin: 0; font-size: 18px; }
+  .client-page h3 { margin: 0; font-size: 16px; }
+
+  .client-header {
+    display:flex;justify-content:space-between;align-items:center;
+    padding:1rem 1.25rem;border-bottom:1px solid #e5e7eb;
+  }
+  .client-header-left { display:flex; align-items:center; gap:12px; }
+
+  .client-form { padding:1rem 1.25rem; display:flex; flex-direction:column; gap:14px; }
+
+  .panel { border:1px solid #e5e7eb;border-radius:12px;padding:12px;background:#fff; }
+  .panel-title-row { display:flex;align-items:center;gap:8px;justify-content:space-between;margin-bottom:8px; }
+  .panel-title { margin:0; }
+
+  .tool-row { display:flex;gap:10px;align-items:center;margin:8px 0 12px; }
+  .tool-row input[type="search"]{ flex:1; min-width: 240px; }
+  .toggle { display:flex;align-items:center;gap:6px;color:#6b7280;font-size:12.5px; }
+
+  .field-block { display:flex; flex-direction:column; gap:6px; margin-bottom:10px; }
+  .field-block label { font-size:12.5px; color:#374151; }
+  .field-block input[type="text"], .field-block textarea { width:100%; font-size:14px; }
+
+  .attrs-grid { display:grid; grid-template-columns: 1fr; gap:10px; } /* всегда один столбец */
+  .attr-card { border:1px solid #e5e7eb;border-radius:10px;padding:10px;background:#fafafa; }
+  .attr-head { display:flex;align-items:center;gap:8px;justify-content:space-between;margin-bottom:6px; }
+  .attr-label { font-weight:600; margin:0; font-size:13px; }
+  .attr-input input[type="text"], .attr-input textarea { width:100%; font-size:14px; }
+  .attr-input textarea { resize: vertical; }
+
+  /* одинаковые кнопки */
+  .actions-eq { display:flex;gap:8px;justify-content:flex-end; }
+  .btn-eq { min-width: 180px; } /* одинаковая визуальная ширина */
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function(){
+    const q = document.getElementById('attrSearch');
+    const toggle = document.getElementById('toggleKeys');
+    const cards = Array.from(document.querySelectorAll('.attr-card'));
+    const pills = Array.from(document.querySelectorAll('.token-pill'));
+
+    const filter = () => {
+      const t = (q?.value || '').toLowerCase().trim();
+      cards.forEach(c => {
+        const lbl = (c.getAttribute('data-label') || '').toLowerCase();
+        c.style.display = (t === '' || lbl.includes(t)) ? '' : 'none';
+      });
+    };
+    const showKeys = () => {
+      const on = toggle?.checked;
+      pills.forEach(p => p.style.display = on ? '' : 'none');
+    };
+
+    q && q.addEventListener('input', filter); filter();
+    toggle && toggle.addEventListener('change', showKeys); showKeys();
+  });
+</script>
+{% endblock %}

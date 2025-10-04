@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method="post" class="card">
+  {% csrf_token %}
+  <h2 style="margin-top:0">Новый атрибут</h2>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <label>Название
+      {{ form.name }}
+    </label>
+    <label>Ключ (без фигурных скобок)
+      {{ form.key }}
+    </label>
+  </div>
+  <p class="muted" style="margin:.5rem 0 0">Плейсхолдер будет вида <span class="pill monospace">{KEY}</span>.</p>
+  <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px">
+    <a href="/entities/" class="btn btn-outline">Отмена</a>
+    <button type="submit" class="btn btn-primary">Создать атрибут</button>
+  </div>
+</form>
+{% endblock %}

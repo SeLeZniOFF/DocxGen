@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="card" style="margin-bottom:1rem">
+  <h1 style="margin:0 0 .25rem 0">DocxGen</h1>
+  <p class="muted" style="margin:0 0 .75rem 0">Храните атрибуты клиентов, загружайте .docx-шаблоны и генерируйте документы в один клик.</p>
+  <div class="stats-grid">
+    <div class="stat"><div class="stat-num">{{ stats.clients }}</div><div class="stat-label">Клиенты</div></div>
+    <div class="stat"><div class="stat-num">{{ stats.entities }}</div><div class="stat-label">Атрибуты</div></div>
+    <div class="stat"><div class="stat-num">{{ stats.templates }}</div><div class="stat-label">Шаблоны</div></div>
+    <div class="stat"><div class="stat-num">{{ stats.docs }}</div><div class="stat-label">Документы</div></div>
+  </div>
+</section>
+
+<section class="wrap" style="display:grid;grid-template-columns:repeat(3,minmax(260px,1fr));gap:16px">
+  <article class="card"><h3>Клиенты</h3><p class="muted">Создавайте клиентов и заполняйте их атрибуты.</p><a href="/clients/" class="btn btn-primary btn-sm">Перейти</a></article>
+  <article class="card"><h3>Атрибуты (Entity)</h3><p class="muted">Добавляйте плейсхолдеры, которые будут в шаблонах.</p><a href="/entities/" class="btn btn-primary btn-sm">Перейти</a></article>
+  <article class="card"><h3>Шаблоны</h3><p class="muted">Загрузите .docx и генерируйте документы.</p><a href="/upload/" class="btn btn-primary btn-sm">Перейти</a></article>
+</section>
+{% endblock %}
