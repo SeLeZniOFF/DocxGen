@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method="post" class="card">
+  {% csrf_token %}
+  <h2>{{ title }}</h2>
+  <p>Вы уверены, что хотите удалить: <strong>{{ object }}</strong>?</p>
+  <footer class="actions">
+    <button type="submit" class="contrast">Удалить</button>
+    <a href="/{% if cancel_url %}{{ cancel_url }}{% endif %}/" role="button" class="secondary">Отмена</a>
+  </footer>
+</form>
+{% endblock %}

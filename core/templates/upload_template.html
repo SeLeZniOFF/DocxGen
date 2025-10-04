@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Загрузка шаблона (.docx)</h2>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Загрузить</button>
+</form>
+
+<h3>Загруженные шаблоны</h3>
+<table>
+  <thead><tr><th>Название</th><th>Файл</th><th>Загружен</th></tr></thead>
+  <tbody>
+  {% for t in templates %}
+    <tr>
+      <td>{{ t.name }}</td>
+      <td><a href="{{ t.file.url }}">скачать</a></td>
+      <td>{{ t.uploaded_at }}</td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="3">Пока нет шаблонов</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

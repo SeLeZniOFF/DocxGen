@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Готовые документы</h2>
+<table>
+  <thead><tr><th>Дата</th><th>Клиент</th><th>Шаблон</th><th>Файл</th></tr></thead>
+  <tbody>
+  {% for d in docs %}
+    <tr>
+      <td>{{ d.created_at }}</td>
+      <td>{{ d.client.name }}</td>
+      <td>{{ d.template.name }}</td>
+      <td><a href="/download/{{ d.id }}/">Скачать</a></td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="4">Пока нет документов</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

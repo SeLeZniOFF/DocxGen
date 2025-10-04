@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Генерация документа</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Сгенерировать</button>
+</form>
+<p>
+  Подсказка: создайте сущности (например FIO, ADDRESS), затем на странице <a href="/clients/">Клиенты</a> откройте клиента и заполните атрибуты.
+</p>
+{% endblock %}
